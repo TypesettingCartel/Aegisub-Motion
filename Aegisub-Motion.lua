@@ -3,7 +3,7 @@ script_description = "A set of tools for simplifying the process of creating and
 script_author = "torque"
 script_version = "0.5.0"
 local config_file = "aegisub-motion.conf"
-local success, re, onetime_init, init_input, parse_input, populateInputBox, dialogPreproc, getSelInfo, spoof_table, extraLineMetrics, ensuretags, frame_by_frame, mochaRatios, possify, orginate, makexypos, clippinate, transformate, scalify, rotate, munch, cleanup, dialog_sort, readconf, writeconf, splitconf, configscope, confmaker, trimnthings, collecttrim, dcos, dacos, dsin, dasin, dtan, datan, fix, check_user_cancelled, conformdialog, windowerr, printmem, debug, warn, round, getvideoname, isvideo
+local success, re, onetime_init, init_input, parse_input, populateInputBox, dialogPreproc, getSelInfo, spoof_table, extraLineMetrics, ensuretags, frame_by_frame, mochaRatios, possify, orginate, makexypos, clippinate, transformate, scalify, rotate, munch, cleanup, dialog_sort, readconf, writeconf, splitconf, configscope, confmaker, trimnthings, collecttrim, dcos, dacos, dsin, dasin, dtan, datan, fix, check_user_cancelled, conformdialog, makebuttons, windowerr, printmem, debug, warn, round, getvideoname, isvideo
 local gui, guiconf, winpaths, encpre, global, alltags, globaltags, importanttags
 require("karaskel")
 require("clipboard")
@@ -77,7 +77,7 @@ onetime_init = function()
         1,
         name = "xpos",
         value = true,
-        label = "x",
+        label = "&x",
         hint = "Apply x position data to the selected lines."
       },
       ypos = {
@@ -88,7 +88,7 @@ onetime_init = function()
         1,
         name = "ypos",
         value = true,
-        label = "y",
+        label = "&y",
         hint = "Apply y position data to the selected lines."
       },
       origin = {
@@ -99,7 +99,7 @@ onetime_init = function()
         1,
         name = "origin",
         value = false,
-        label = "Origin",
+        label = "&Origin",
         hint = "Move the origin along with the position."
       },
       clip = {
@@ -110,7 +110,7 @@ onetime_init = function()
         1,
         name = "clip",
         value = false,
-        label = "Clip",
+        label = "&Clip",
         hint = "Move clip along with the position (note: will also be scaled and rotated if those options are selected)."
       },
       scale = {
@@ -121,7 +121,7 @@ onetime_init = function()
         1,
         name = "scale",
         value = true,
-        label = "Scale",
+        label = "&Scale",
         hint = "Apply scaling data to the selected lines."
       },
       border = {
@@ -132,7 +132,7 @@ onetime_init = function()
         1,
         name = "border",
         value = true,
-        label = "Border",
+        label = "&Border",
         hint = "Scale border with the line (only if Scale is also selected)."
       },
       shadow = {
@@ -143,7 +143,7 @@ onetime_init = function()
         1,
         name = "shadow",
         value = true,
-        label = "Shadow",
+        label = "&Shadow",
         hint = "Scale shadow with the line (only if Scale is also selected)."
       },
       blur = {
@@ -154,7 +154,7 @@ onetime_init = function()
         1,
         name = "blur",
         value = true,
-        label = "Blur",
+        label = "Bl&ur",
         hint = "Scale blur with the line (only if Scale is also selected, does not scale \\be)."
       },
       rotation = {
@@ -165,7 +165,7 @@ onetime_init = function()
         1,
         name = "rotation",
         value = false,
-        label = "Rotation",
+        label = "&Rotation",
         hint = "Apply rotation data to the selected lines."
       },
       posround = {
@@ -212,7 +212,7 @@ onetime_init = function()
         1,
         name = "wconfig",
         value = false,
-        label = "Write config",
+        label = "&Write config",
         hint = "Write current settings to the configuration file."
       },
       relative = {
@@ -223,7 +223,7 @@ onetime_init = function()
         1,
         name = "relative",
         value = true,
-        label = "Relative",
+        label = "R&elative",
         hint = "Start frame should be relative to the line's start time rather than to the start time of all selected lines"
       },
       stframe = {
@@ -244,7 +244,7 @@ onetime_init = function()
         1,
         name = "linear",
         value = false,
-        label = "Linear",
+        label = "Li&near",
         hint = "Use transforms and \\move to create a linear transition, instead of frame-by-frame."
       },
       sortd = {
@@ -298,7 +298,7 @@ onetime_init = function()
         1,
         name = "xpos",
         value = true,
-        label = "x",
+        label = "&x",
         hint = "Apply x position data to the selected lines."
       },
       ypos = {
@@ -309,7 +309,7 @@ onetime_init = function()
         1,
         name = "ypos",
         value = true,
-        label = "y",
+        label = "&y",
         hint = "Apply y position data to the selected lines."
       },
       scale = {
@@ -320,7 +320,7 @@ onetime_init = function()
         1,
         name = "scale",
         value = true,
-        label = "Scale"
+        label = "&Scale"
       },
       rotation = {
         "checkbox",
@@ -330,7 +330,7 @@ onetime_init = function()
         1,
         name = "rotation",
         value = false,
-        label = "Rotation"
+        label = "&Rotation"
       },
       relative = {
         "checkbox",
@@ -340,7 +340,7 @@ onetime_init = function()
         1,
         name = "relative",
         value = true,
-        label = "Relative"
+        label = "R&elative"
       },
       stframe = {
         "intedit",
@@ -661,87 +661,122 @@ init_input = function(sub, sel)
   local setundo = aegisub.set_undo_point
   printmem("GUI startup")
   local conf, accd = dialogPreproc(sub, sel)
-  local button, config = aegisub.dialog.display(gui.main, {
-    "Go",
-    "&\\clip...",
-    "Abort"
-  })
-  local clipconf
-  if button == "&\\clip..." then
-    button, clipconf = aegisub.dialog.display(gui.clip, {
-      "Go",
-      "Cancel",
-      "Abort"
+  local btns = {
+    main = makebuttons({
+      {
+        ok = "&Go"
+      },
+      {
+        clip = "&\\clip..."
+      },
+      {
+        cancel = "&Abort"
+      }
+    }),
+    clip = makebuttons({
+      {
+        ok = "&Go clippin'"
+      },
+      {
+        cancel = "&Cancel"
+      },
+      {
+        abort = "&Abort"
+      }
     })
-  end
-  local _exp_0 = button
-  if "Go" == _exp_0 then
-    clipconf = clipconf or { }
-    local _list_0 = guiconf.clip
-    for _index_0 = 1, #_list_0 do
-      local field = _list_0[_index_0]
-      if clipconf[field] == nil then
-        clipconf[field] = gui.clip[field].value
+  }
+  local dlg = "main"
+  while true do
+    local _continue_0 = false
+    repeat
+      local clipconf, button, config
+      do
+        local _with_0 = btns[dlg]
+        button, config = aegisub.dialog.display(gui[dlg], _with_0.__list, _with_0.__namedlist)
       end
-    end
-    if config.linespath == "" then
-      config.linespath = false
-    end
-    if config.wconfig then
-      writeconf(conf, {
-        main = config,
-        clip = clipconf,
-        global = global
-      })
-    end
-    if config.stframe == 0 then
-      config.stframe = 1
-    end
-    if clipconf.stframe == 0 then
-      clipconf.stframe = 1
-    end
-    if config.xpos or config.ypos then
-      config.position = true
-    end
-    if clipconf.xpos or clipconf.ypos then
-      clipconf.position = true
-    end
-    config.yconst = not config.ypos
-    config.xconst = not config.xpos
-    clipconf.yconst = not clipconf.ypos
-    clipconf.xconst = not clipconf.xpos
-    if config.clip then
-      clipconf.stframe = config.stframe
-    end
-    if config.clip or clipconf.clippath then
-      config.linear = false
-    end
-    if clipconf.clippath == "" or clipconf.clippath == nil then
-      if not config.linespath then
-        windowerr(false, "No tracking data was provided.")
-      end
-      clipconf.clippath = false
-    else
-      config.clip = false
-    end
-    aegisub.progress.title("Mincing Gerbils")
-    printmem("Go")
-    local newsel = frame_by_frame(sub, accd, config, clipconf)
-    if munch(sub, newsel) then
-      newsel = { }
-      for x = 1, #sub do
-        if tostring(sub[x].effect):match("^aa%-mou") then
-          table.insert(newsel, x)
+      local _exp_0 = button
+      if btns.main.clip == _exp_0 then
+        dlg = "clip"
+        _continue_0 = true
+        break
+      elseif btns.main.ok == _exp_0 or btns.clip.ok == _exp_0 then
+        clipconf = clipconf or { }
+        local _list_0 = guiconf.clip
+        for _index_0 = 1, #_list_0 do
+          local field = _list_0[_index_0]
+          if clipconf[field] == nil then
+            clipconf[field] = gui.clip[field].value
+          end
+        end
+        if config.linespath == "" then
+          config.linespath = false
+        end
+        if config.wconfig then
+          writeconf(conf, {
+            main = config,
+            clip = clipconf,
+            global = global
+          })
+        end
+        if config.stframe == 0 then
+          config.stframe = 1
+        end
+        if clipconf.stframe == 0 then
+          clipconf.stframe = 1
+        end
+        if config.xpos or config.ypos then
+          config.position = true
+        end
+        if clipconf.xpos or clipconf.ypos then
+          clipconf.position = true
+        end
+        config.yconst = not config.ypos
+        config.xconst = not config.xpos
+        clipconf.yconst = not clipconf.ypos
+        clipconf.xconst = not clipconf.xpos
+        if config.clip then
+          clipconf.stframe = config.stframe
+        end
+        if config.clip or clipconf.clippath then
+          config.linear = false
+        end
+        if clipconf.clippath == "" or clipconf.clippath == nil then
+          if not config.linespath then
+            windowerr(false, "No tracking data was provided.")
+          end
+          clipconf.clippath = false
+        else
+          config.clip = false
+        end
+        aegisub.progress.title("Mincing Gerbils")
+        printmem("Go")
+        local newsel = frame_by_frame(sub, accd, config, clipconf)
+        if munch(sub, newsel) then
+          newsel = { }
+          for x = 1, #sub do
+            if tostring(sub[x].effect):match("^aa%-mou") then
+              table.insert(newsel, x)
+            end
+          end
+        end
+        aegisub.progress.title("Reformatting Gerbils")
+        cleanup(sub, newsel, config)
+        break
+      else
+        if dlg == 'main' or button == btns.clip.abort then
+          aegisub.progress.task("ABORT")
+          aegisub.cancel()
+        else
+          dlg = "main"
+          _continue_0 = true
+          break
         end
       end
+      _continue_0 = true
+    until true
+    if not _continue_0 then
+      break
     end
-    aegisub.progress.title("Reformatting Gerbils")
-    cleanup(sub, newsel, config)
-  elseif "Cancel" == _exp_0 then
-    init_input(sub, sel)
-  else
-    aegisub.progress.task("ABORT")
-    aegisub.cancel()
   end
   setundo("Motion Data")
   return printmem("Closing")
@@ -1658,50 +1693,89 @@ confmaker = function()
     end
   end
   gui.conf.enccom.value = encpre[global.encoder] or gui.conf.enccom.value
-  local button, config = aegisub.dialog.display(gui.conf, {
-    "Write",
-    "Write local",
-    "\\clip...",
-    "Abort"
-  })
-  local clipconf
-  if button == "\\clip..." then
-    button, clipconf = aegisub.dialog.display(gui.clip, {
-      "Write",
-      "Write local",
-      "Cancel",
-      "Abort"
+  local btns = {
+    conf = makebuttons({
+      {
+        ok = "&Write"
+      },
+      {
+        ["local"] = "Write &local"
+      },
+      {
+        clip = "&\\clip..."
+      },
+      {
+        cancel = "&Abort"
+      }
+    }),
+    clip = makebuttons({
+      {
+        ok = "&Write"
+      },
+      {
+        ["local"] = "Write &local"
+      },
+      {
+        cancel = "&Cancel"
+      },
+      {
+        abort = "&Abort"
+      }
     })
-  end
-  local _exp_0 = button
-  if "Write" == _exp_0 or "Write local" == _exp_0 then
-    clipconf = clipconf or { }
-    if button == "Write local" then
-      conf = aegisub.decode_path("?script/" .. config_file)
-    end
-    if global.encoder ~= config.encoder then
-      config.enccom = encpre[config.encoder] or config.enccom
-    end
-    for key, value in pairs(global) do
-      global[key] = config[key]
-      config[key] = nil
-    end
-    local _list_0 = guiconf.clip
-    for _index_0 = 1, #_list_0 do
-      local field = _list_0[_index_0]
-      if clipconf[field] == nil then
-        clipconf[field] = gui.clip[field].value
+  }
+  local dlg = "conf"
+  while true do
+    local _continue_0 = false
+    repeat
+      local clipconf, button, config
+      do
+        local _with_0 = btns[dlg]
+        button, config = aegisub.dialog.display(gui[dlg], _with_0.__list, _with_0.__namedlist)
       end
+      local _exp_0 = button
+      if btns.conf.clip == _exp_0 then
+        dlg = "clip"
+        _continue_0 = true
+        break
+      elseif btns.conf.ok == _exp_0 or btns.conf["local"] == _exp_0 or btns.clip.ok == _exp_0 or btns.clip["local"] == _exp_0 then
+        clipconf = clipconf or { }
+        if button == "Write local" then
+          conf = aegisub.decode_path("?script/" .. config_file)
+        end
+        if global.encoder ~= config.encoder then
+          config.enccom = encpre[config.encoder] or config.enccom
+        end
+        for key, value in pairs(global) do
+          global[key] = config[key]
+          config[key] = nil
+        end
+        local _list_0 = guiconf.clip
+        for _index_0 = 1, #_list_0 do
+          local field = _list_0[_index_0]
+          if clipconf[field] == nil then
+            clipconf[field] = gui.clip[field].value
+          end
+        end
+        writeconf(conf, {
+          main = config,
+          clip = clipconf,
+          global = global
+        })
+        break
+      else
+        if dlg == "conf" or button == btns.clip.abort then
+          aegisub.cancel()
+        else
+          dlg = "conf"
+          _continue_0 = true
+          break
+        end
+      end
+      _continue_0 = true
+    until true
+    if not _continue_0 then
+      break
     end
-    return writeconf(conf, {
-      main = config,
-      clip = clipconf,
-      global = global
-    })
-  elseif "Cancel" == _exp_0 then
-    return confmaker()
-  else
-    return aegisub.cancel()
   end
 end
 trimnthings = function(sub, sel)
@@ -1901,6 +1975,21 @@ conformdialog = function(dlg)
   end
   return dlg
 end
+makebuttons = function(extendedlist)
+  local btns = {
+    __list = { },
+    __namedlist = { }
+  }
+  for _index_0 = 1, #extendedlist do
+    local L = extendedlist[_index_0]
+    for k, v in pairs(L) do
+      btns[k] = v
+      btns.__namedlist[k] = v
+      table.insert(btns.__list, v)
+    end
+  end
+  return btns
+end
 windowerr = function(bool, message)
   if not bool then
     aegisub.dialog.display({
@@ -1909,7 +1998,9 @@ windowerr = function(bool, message)
         label = message
       }
     }, {
-      "Close"
+      "&Close"
+    }, {
+      cancel = "&Close"
     })
     return error(message)
   end

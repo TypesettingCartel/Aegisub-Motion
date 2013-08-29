@@ -93,39 +93,41 @@ onetime_init = ->
 	-- [[ Set up interface tables. ]]--
 	gui = {
 		main: {
+			-- mnemonics: xyOCSBuRWen + G\A + Wl\A
 			linespath: {"textbox",  0, 1,  10, 4, name:  "linespath", hint: "Paste data or the path to a file containing it. No quotes or escapes."}
 			pref:      {"textbox",  0, 14, 10, 3, name:  "pref", hint: "The prefix", hint: "The directory any generated files will be written to."}
 			preflabel: {"label",    0, 13, 10, 1, label: "                  Files will be written to this directory."}
 			datalabel: {"label",    0, 0,  10, 1, label: "                       Paste data or enter a filepath."}
 			optlabel:  {"label",    0, 6,  5,  1, label: "Data to be applied:"}
 			rndlabel:  {"label",    7, 6,  3,  1, label: "Rounding"}
-			xpos:      {"checkbox", 0, 7,  1,  1, name:  "xpos", value: true, label: "x", hint: "Apply x position data to the selected lines."}
-			ypos:      {"checkbox", 1, 7,  1,  1, name:  "ypos", value: true, label: "y", hint: "Apply y position data to the selected lines."}
-			origin:    {"checkbox", 2, 7,  2,  1, name:  "origin", value: false, label: "Origin", hint: "Move the origin along with the position."}
-			clip:      {"checkbox", 4, 7,  2,  1, name:  "clip", value: false, label: "Clip", hint: "Move clip along with the position (note: will also be scaled and rotated if those options are selected)."}
-			scale:     {"checkbox", 0, 8,  2,  1, name:  "scale", value: true, label: "Scale", hint: "Apply scaling data to the selected lines."}
-			border:    {"checkbox", 2, 8,  2,  1, name:  "border", value: true, label: "Border", hint: "Scale border with the line (only if Scale is also selected)."}
-			shadow:    {"checkbox", 4, 8,  2,  1, name:  "shadow", value: true, label: "Shadow", hint: "Scale shadow with the line (only if Scale is also selected)."}
-			blur:      {"checkbox", 4, 9,  2,  1, name:  "blur", value: true, label: "Blur", hint: "Scale blur with the line (only if Scale is also selected, does not scale \\be)."}
-			rotation:  {"checkbox", 0, 9,  3,  1, name:  "rotation", value: false, label: "Rotation", hint: "Apply rotation data to the selected lines."}
+			xpos:      {"checkbox", 0, 7,  1,  1, name:  "xpos", value: true, label: "&x", hint: "Apply x position data to the selected lines."}
+			ypos:      {"checkbox", 1, 7,  1,  1, name:  "ypos", value: true, label: "&y", hint: "Apply y position data to the selected lines."}
+			origin:    {"checkbox", 2, 7,  2,  1, name:  "origin", value: false, label: "&Origin", hint: "Move the origin along with the position."}
+			clip:      {"checkbox", 4, 7,  2,  1, name:  "clip", value: false, label: "&Clip", hint: "Move clip along with the position (note: will also be scaled and rotated if those options are selected)."}
+			scale:     {"checkbox", 0, 8,  2,  1, name:  "scale", value: true, label: "&Scale", hint: "Apply scaling data to the selected lines."}
+			border:    {"checkbox", 2, 8,  2,  1, name:  "border", value: true, label: "&Border", hint: "Scale border with the line (only if Scale is also selected)."}
+			shadow:    {"checkbox", 4, 8,  2,  1, name:  "shadow", value: true, label: "&Shadow", hint: "Scale shadow with the line (only if Scale is also selected)."}
+			blur:      {"checkbox", 4, 9,  2,  1, name:  "blur", value: true, label: "Bl&ur", hint: "Scale blur with the line (only if Scale is also selected, does not scale \\be)."}
+			rotation:  {"checkbox", 0, 9,  3,  1, name:  "rotation", value: false, label: "&Rotation", hint: "Apply rotation data to the selected lines."}
 			posround:  {"intedit",  7, 7,  3,  1, name:  "posround", value: 2, min: 0, max: 5, hint: "How many decimal places of accuracy the resulting positions should have."}
 			sclround:  {"intedit",  7, 8,  3,  1, name:  "sclround", value: 2, min: 0, max: 5, hint: "How many decimal places of accuracy the resulting scales should have (also applied to border, shadow, and blur)."}
 			rotround:  {"intedit",  7, 9,  3,  1, name:  "rotround", value: 2, min: 0, max: 5, hint: "How many decimal places of accuracy the resulting rotations should have."}
-			wconfig:   {"checkbox", 0, 11, 4,  1, name:  "wconfig", value: false, label: "Write config", hint: "Write current settings to the configuration file."}
-			relative:  {"checkbox", 4, 11, 3,  1, name:  "relative", value: true, label: "Relative", hint: "Start frame should be relative to the line's start time rather than to the start time of all selected lines"}
+			wconfig:   {"checkbox", 0, 11, 4,  1, name:  "wconfig", value: false, label: "&Write config", hint: "Write current settings to the configuration file."}
+			relative:  {"checkbox", 4, 11, 3,  1, name:  "relative", value: true, label: "R&elative", hint: "Start frame should be relative to the line's start time rather than to the start time of all selected lines"}
 			stframe:   {"intedit",  7, 11, 3,  1, name:  "stframe", value: 1, hint: "Frame used as the starting point for the tracking data. \"-1\" corresponds to the last frame."}
-			linear:    {"checkbox", 4, 12, 2,  1, name:  "linear", value: false, label: "Linear", hint: "Use transforms and \\move to create a linear transition, instead of frame-by-frame."}
+			linear:    {"checkbox", 4, 12, 2,  1, name:  "linear", value: false, label: "Li&near", hint: "Use transforms and \\move to create a linear transition, instead of frame-by-frame."}
 			sortd:     {"dropdown", 5, 5,  4,  1, name:  "sortd", hint: "Sort lines by", value: "Default", items: {"Default", "Time"}, hint: "The order to sort the lines after they have been tracked."}
 			sortlabel: {"label",    1, 5,  4,  1, name:  "sortlabel", label: "      Sort Method:"}
 		}
 		clip: {
+			-- mnemonics: xySRe + GCA
 			clippath: {"textbox",   0, 1, 10, 4,  name:  "clippath", hint: "Paste data or the path to a file containing it. No quotes or escapes."}
 			label:    {"label",     0, 0, 10, 1,  label: "                 Paste data or enter a filepath."}
-			xpos:     {"checkbox",  0, 6, 1,  1,  name:  "xpos", value: true, label: "x", hint: "Apply x position data to the selected lines."}
-			ypos:     {"checkbox",  1, 6, 1,  1,  name:  "ypos", value: true, label: "y", hint: "Apply y position data to the selected lines."}
-			scale:    {"checkbox",  0, 7, 2,  1,  name:  "scale", value: true, label: "Scale"}
-			rotation: {"checkbox",  0, 8, 3,  1,  name:  "rotation", value: false, label: "Rotation"}
-			relative: {"checkbox",  4, 6, 3,  1,  name:  "relative", value: true, label: "Relative"}
+			xpos:     {"checkbox",  0, 6, 1,  1,  name:  "xpos", value: true, label: "&x", hint: "Apply x position data to the selected lines."}
+			ypos:     {"checkbox",  1, 6, 1,  1,  name:  "ypos", value: true, label: "&y", hint: "Apply y position data to the selected lines."}
+			scale:    {"checkbox",  0, 7, 2,  1,  name:  "scale", value: true, label: "&Scale"}
+			rotation: {"checkbox",  0, 8, 3,  1,  name:  "rotation", value: false, label: "&Rotation"}
+			relative: {"checkbox",  4, 6, 3,  1,  name:  "relative", value: true, label: "R&elative"}
 			stframe:  {"intedit",   7, 6, 3,  1,  name:  "stframe", value: 1}
 		}
 		t: {
@@ -270,59 +272,74 @@ init_input = (sub, sel) -> -- THIS IS PROPRIETARY CODE YOU CANNOT LOOK AT IT
 	printmem "GUI startup"
 
 	conf, accd = dialogPreproc sub, sel
-	button, config = aegisub.dialog.display(gui.main, {"Go", "&\\clip...", "Abort"})
 
-	local clipconf
-	if button == "&\\clip..."
-		button, clipconf = aegisub.dialog.display(gui.clip, {"Go", "Cancel", "Abort"})
+	-- cancel:Abort in the main dialog tells Esc key to abort the entire macro
+	-- cancel:Cancel in \clip dialog tells Esc key to close it and go back to the main dialog
+	btns = {
+			main: makebuttons {{ok:"&Go"}, {clip:"&\\clip..."}, {cancel:"&Abort"}}
+			clip: makebuttons {{ok:"&Go clippin'"}, {cancel:"&Cancel"}, {abort:"&Abort"}}
+		}
+	dlg = "main"
 
-	switch button
-		when "Go"
-			clipconf = clipconf or {} -- solve indexing errors
-			for field in *guiconf.clip
-				if clipconf[field] == nil then clipconf[field] = gui.clip[field].value
-			config.linespath = false if config.linespath == ""
+	while true
+		local clipconf, button, config
 
-			writeconf conf, {main: config, clip: clipconf, global: global} if config.wconfig
+		with btns[dlg]
+			button, config = aegisub.dialog.display(gui[dlg], .__list, .__namedlist)
 
-			config.stframe   = 1 if config.stframe == 0 -- TODO: fix this horrible clusterfuck
-			clipconf.stframe = 1 if clipconf.stframe == 0
+		switch button
+			when btns.main.clip
+				dlg = "clip"
+				continue
 
-			config.position   = true if config.xpos or config.ypos
-			clipconf.position = true if clipconf.xpos or clipconf.ypos
+			when btns.main.ok, btns.clip.ok
+				clipconf = clipconf or {} -- solve indexing errors
+				for field in *guiconf.clip
+					if clipconf[field] == nil then clipconf[field] = gui.clip[field].value
+				config.linespath = false if config.linespath == ""
 
-			config.yconst   = not config.ypos
-			config.xconst   = not config.xpos
-			clipconf.yconst = not clipconf.ypos
-			clipconf.xconst = not clipconf.xpos -- TODO: remove unnecessary logic inversion
+				writeconf conf, {main: config, clip: clipconf, global: global} if config.wconfig
 
-			clipconf.stframe = config.stframe if config.clip
-			config.linear    = false if config.clip or clipconf.clippath
+				config.stframe   = 1 if config.stframe == 0 -- TODO: fix this horrible clusterfuck
+				clipconf.stframe = 1 if clipconf.stframe == 0
 
-			if clipconf.clippath == "" or clipconf.clippath == nil
-				if not config.linespath then windowerr false, "No tracking data was provided."
-				clipconf.clippath = false
+				config.position   = true if config.xpos or config.ypos
+				clipconf.position = true if clipconf.xpos or clipconf.ypos
+
+				config.yconst   = not config.ypos
+				config.xconst   = not config.xpos
+				clipconf.yconst = not clipconf.ypos
+				clipconf.xconst = not clipconf.xpos -- TODO: remove unnecessary logic inversion
+
+				clipconf.stframe = config.stframe if config.clip
+				config.linear    = false if config.clip or clipconf.clippath
+
+				if clipconf.clippath == "" or clipconf.clippath == nil
+					if not config.linespath then windowerr false, "No tracking data was provided."
+					clipconf.clippath = false
+				else
+					config.clip = false -- set clip to false if clippath exists
+
+				aegisub.progress.title "Mincing Gerbils"
+				printmem "Go"
+
+				newsel = frame_by_frame sub, accd, config, clipconf
+				if munch sub, newsel
+					newsel = {}
+					for x = 1, #sub
+						table.insert newsel, x if tostring(sub[x].effect)\match("^aa%-mou")
+
+				aegisub.progress.title "Reformatting Gerbils"
+				cleanup sub, newsel, config
+				break
+
 			else
-				config.clip = false -- set clip to false if clippath exists
-
-			aegisub.progress.title "Mincing Gerbils"
-			printmem "Go"
-
-			newsel = frame_by_frame sub, accd, config, clipconf
-			if munch sub, newsel
-				newsel = {}
-				for x = 1, #sub
-					table.insert newsel, x if tostring(sub[x].effect)\match("^aa%-mou")
-
-			aegisub.progress.title "Reformatting Gerbils"
-			cleanup sub, newsel, config
-
-		when "Cancel"
-			init_input sub, sel -- this is extremely unideal as it reruns all of the information gathering functions as well.
-
-		else
-			aegisub.progress.task "ABORT"
-			aegisub.cancel()
+				if dlg == 'main' or button == btns.clip.abort
+					aegisub.progress.task "ABORT"
+					aegisub.cancel!
+				else
+					dlg = "main"
+					continue
 
 	setundo "Motion Data"
 	printmem "Closing"
@@ -1027,32 +1044,44 @@ confmaker = ->
 		gui.conf[key].value = value if gui.conf[key]
 	gui.conf.enccom.value = encpre[global.encoder] or gui.conf.enccom.value
 
-	button, config = aegisub.dialog.display(gui.conf, {"Write", "Write local", "\\clip...", "Abort"})
+	btns = {
+			conf: makebuttons {{ok:"&Write"}, {local:"Write &local"}, {clip:"&\\clip..."}, {cancel:"&Abort"}}
+			clip: makebuttons {{ok:"&Write"}, {local:"Write &local"}, {cancel:"&Cancel"}, {abort:"&Abort"}}
+		}
+	dlg = "conf"
 
-	local clipconf
-	if button == "\\clip..."
-		button, clipconf = aegisub.dialog.display(gui.clip, {"Write", "Write local", "Cancel", "Abort"})
+	while true
+		local clipconf, button, config
 
-	switch button
-		when "Write", "Write local"
-			clipconf = clipconf or {}
-			conf = aegisub.decode_path("?script/"..config_file) if button == "Write local"
-			config.enccom = encpre[config.encoder] or config.enccom if global.encoder != config.encoder
+		with btns[dlg]
+			button, config = aegisub.dialog.display(gui[dlg], .__list, .__namedlist)
 
-			for key, value in pairs global
-				global[key] = config[key]
-				config[key] = nil
+		switch button
+			when btns.conf.clip
+				dlg = "clip"
+				continue
 
-			for field in *guiconf.clip
-				clipconf[field] = gui.clip[field].value if clipconf[field] == nil
+			when btns.conf.ok, btns.conf.local, btns.clip.ok, btns.clip.local
+				clipconf = clipconf or {}
+				conf = aegisub.decode_path("?script/"..config_file) if button == "Write local"
+				config.enccom = encpre[config.encoder] or config.enccom if global.encoder != config.encoder
 
-			writeconf conf, {main: config, clip: clipconf, global: global}
+				for key, value in pairs global
+					global[key] = config[key]
+					config[key] = nil
 
-		when "Cancel"
-			confmaker!
+				for field in *guiconf.clip
+					clipconf[field] = gui.clip[field].value if clipconf[field] == nil
 
-		else
-			aegisub.cancel()
+				writeconf conf, {main: config, clip: clipconf, global: global}
+				break
+
+			else
+				if dlg == "conf" or button == btns.clip.abort
+					aegisub.cancel!
+				else
+					dlg = "conf"
+					continue
 
 -------------------------------------------------------------------------------
 
@@ -1202,9 +1231,18 @@ conformdialog = (dlg) ->
 			e[k] = v
 	dlg
 
+makebuttons = (extendedlist) -> -- example: {{ok:'&Add'}, {load:'Loa&d...'}, {cancel:'&Cancel'}}
+	btns = {__list:{}, __namedlist:{}}
+	for L in *extendedlist
+		for k,v in pairs L
+			btns[k] = v
+			btns.__namedlist[k] = v
+			table.insert btns.__list, v
+	btns
+
 windowerr = (bool, message) ->
 	if not bool
-		aegisub.dialog.display {{class:"label", label:message}}, {"Close"}
+		aegisub.dialog.display {{class:"label", label:message}}, {"&Close"}, {cancel:"&Close"}
 		error message
 
 printmem = (a) ->
