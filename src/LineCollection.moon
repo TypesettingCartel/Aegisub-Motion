@@ -47,6 +47,38 @@ class LineCollection
 					@lastLineNumber = i + 1
 					break
 
+		-- Overwrite __index/__newindex without breaking Moonscript's objects
+		-- Assumes any numerical key is for @lines, otherwise for the object itself
+		metatable = getmetatable @
+		oldIndex = metatable.__index
+		indexKV = {}
+
+		for i, v in pairs self
+			unless type(v) == 'function'
+				indexKV[i] = v
+
+		for i, v in pairs oldIndex
+			indexKV[i] = v
+
+		newIndex = ( key ) =>
+			if type(key) == 'number' and indexKV.lines and indexKV.lines[key]
+				return indexKV.lines[key]
+			else
+				return indexKV[key]
+
+		newNewIndex = ( key, value ) =>
+			if type(key) == 'number' and indexKV.lines
+				indexKV.lines[key] = value
+			else
+				indexKV[key] = value
+
+		setmetatable @, {
+			__index: newIndex
+			__newindex: newNewIndex
+			__len: =>
+				#@lines
+		}
+
 	-- This method should update various properties such as
 	-- (start|end)(Time|Frame).
 	addLine: ( line, validationCb = (-> return true), selectLine = true, index = false ) =>
