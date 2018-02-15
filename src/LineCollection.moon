@@ -36,6 +36,16 @@ class LineCollection
 
 	new: ( @sub, sel, validationCb, selectLines = true ) =>
 		@lines = { }
+
+		meta = getmetatable @
+		if 'function' != type meta.__index
+			metaIndex = meta.__index
+			meta.__index = ( index ) =>
+				if 'number' == type index
+					@lines[index]
+				else
+					metaIndex[index]
+
 		if type( sel ) == "table" and #sel > 0
 			@collectLines sel, validationCb, selectLines
 			if frameFromMs 0
@@ -234,6 +244,27 @@ class LineCollection
 	getSelection: =>
 		sel = [line.number for line in *@lines when line.selected and line.inserted and not line.hasBeenDeleted]
 		return sel, sel[#sel]
+
+	__newindex: ( index, value ) =>
+		if 'number' == type index
+			@lines[index] = value
+		else
+			rawset @, index, value
+
+	__len: =>
+		#@lines 
+
+	__ipairs: =>
+		iterator = ( tbl, i ) ->
+			i += 1
+			value = tbl[i]
+			if value
+				i, value
+		iterator, @lines, 0
+
+	-- There's no real reason to use pairs, but I've preserved it anyways
+	__pairs: =>
+		next, @lines, nil
 
 if haveDepCtrl
 	return version\register LineCollection
