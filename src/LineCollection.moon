@@ -173,16 +173,16 @@ class LineCollection
 			else lastLine = @lines[i]
 		@deleteLines linesToSkip
 
-	-- The index that is passed to the callback is intended for progress
-	-- reporting only.
+	-- The third value passed to the callback is for progress reporting only,
+	-- and the fourth is the actual index.
 	runCallback: ( callback, reverse ) =>
 		lineCount = #@lines
 		if reverse
 			for index = lineCount, 1, -1
-				callback @, @lines[index], lineCount - index + 1
+				callback @, @lines[index], lineCount - index + 1, index
 		else
 			for index = 1, lineCount
-				callback @, @lines[index], index
+				callback @, @lines[index], index, index
 
 	deleteLines: ( lines = @lines, doShift = true ) =>
 		if lines.__class == Line
