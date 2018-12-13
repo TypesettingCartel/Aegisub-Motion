@@ -408,8 +408,7 @@ postprocLines = ( lineCollection ) ->
 		if line.wasLinear
 			line\dontTouchTransforms!
 		else
-			if lineCollection.options.main.killTrans
-				line\deduplicateTags!
+			line\deduplicateTags!
 
 		line\shiftKaraoke!
 		line.text = line.text\gsub "{}", ""
