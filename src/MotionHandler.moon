@@ -88,7 +88,7 @@ class MotionHandler
 		-- This has to be copied over for clip interpolation
 		@resultingCollection.meta = @lineCollection.meta
 		for line in *@lineCollection.lines
-			if @options.main.linear and not (@options.main.origin and line.hasOrg) and not ((@rectClipData or @vectClipData) and line.hasClip)
+			if @options.main.linear and not (@options.main.origin and line.hasOrg) and not (@vectClipData and line.hasClip)
 				line.method = linear
 			else
 				line.method = nonlinear
