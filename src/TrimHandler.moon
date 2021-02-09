@@ -34,7 +34,7 @@ class TrimHandler
 
 	-- Set up encoder presets.
 	defaults: {
-		x264:    '"#{encbin}" --crf 16 --tune fastdecode -i 250 --fps 24000/1001 --sar 1:1 --index "#{prefix}/#{index}.index" --seek #{startf} --frames #{lenf} --output-depth 8 -o "#{prefix}/#{output}[#{startf}-#{endf}].mp4" "#{inpath}/#{input}"'
+		x264:    '"#{encbin}" --crf 16 --tune fastdecode -i 250 --fps 24000/1001 --sar 1:1 --index "#{prefix}/#{index}.index" --seek #{startf} --frames #{lenf} --output-depth 8 --output-csp i420 -o "#{prefix}/#{output}[#{startf}-#{endf}].mp4" "#{inpath}/#{input}"'
 		ffmpeg:  '"#{encbin}" -ss #{startt} -an -sn -i "#{inpath}/#{input}" -q:v 1 -vsync passthrough -frames:v #{lenf} "#{prefix}/#{output}[#{startf}-#{endf}]-%05d.jpg"'
 		-- avs2pipe: 'echo FFVideoSource("#{inpath}#{input}",cachefile="#{prefix}#{index}.index").trim(#{startf},#{endf}).ConvertToRGB.ImageWriter("#{prefix}/#{output}-[#{startf}-#{endf}]\\",type="png").ConvertToYV12 > "#{temp}/a-mo.encode.avs"\nmkdir "#{prefix}#{output}-[#{startf}-#{endf}]"\n"#{encbin}" video "#{temp}/a-mo.encode.avs"\ndel "#{temp}/a-mo.encode.avs"'
 		-- vapoursynth:
